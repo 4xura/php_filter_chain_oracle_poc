@@ -1,2 +1,63 @@
 # php_filter_chain_oracle_poc
-PoC scripts to exploit LFR (Local File Read) via PHP filters chain oracle (php://filter), especially for CTF purposes.
+## Overview
+
+The Synacktiv team published an in-depth research article, *[PHP Filter Chains: File Read from Error-Based Oracle](https://www.synacktiv.com/en/publications/php-filter-chains-file-read-from-error-based-oracle)*, initially disclosed at DownUnder CTF 2022. This research was based on a challenge by `@hash_kitten`, where players were tasked with leaking the `/flag` file from a vulnerable PHP-based infrastructure using **error-based oracles**.
+
+Rather than diving into the deep technical internals (which can be reviewed in the **PoC comments**), this guide presents a **Procedural-Oriented Programming (POP) adaptation** of Synacktiv’s original Object-Oriented Programming (OOP) exploit [(available here)](https://github.com/synacktiv/php_filter_chains_oracle_exploit).
+
+This POP-based approach makes it easier to understand the attack’s step-by-step execution, allowing for **customization of key parameters** when adapting the exploit with just one script, especially for CTF challenges.
+
+- This repository includes two Proof-of-Concept (PoC) scripts:
+  - **`poc.py`** – The **standard version**, structured with wrapped functions that cleanly separate each phase of the exploit.
+  - **`poc_procedure.py`** – A **more procedure-oriented** approach, specifically designed for **CTF scenarios**, allowing step-by-step customization of the exploitation process.
+
+## Scenarios
+
+PHP filter chain exploits typically require the following attack primitives for **Arbitrary File Read**:
+
+### 1. LFR via SSRF
+
+- **Objective:** Exploiting Server-Side Request Forgery (SSRF), so that we can interact with the server using URLs and PHP stream wrappers (`php://filter`).
+- **Example:** CVE-2023-6199 in [BookStack](https://fluidattacks.com/blog/lfr-via-blind-ssrf-book-stack/) demonstrates **Local File Read (LFR) via SSRF**.
+
+### 2. Oracle Recovery 
+
+- **Objective:** Capture server responses from oracle-based exploits.
+- **Tooling:** Wireshark, tcpdump, or BurpSuite to inspect HTTP responses.
+- **Example:** A classic CTF challenge demonstrating this method is available [here](https://github.com/4xura/Bianry4CTF/blob/main/Labyrinth/misc/misc_php_filter_chain_oracle.zip).
+
+## Using the PoC
+
+Before executing the PoC, you need to **customize the `req()` function** to define how the exploit interacts with the target server. Because the specific request method (GET/POST/other) and SSRF entry point will vary depending on the scenario.
+
+A basic example: sending the filter chain via a GET request:
+
+```py
+def req(s):
+    """ [!] Customize the logic of requests """ 
+    file_to_leak = '/etc/passwd'
+    chain = f"php://filter/{s}/resource={file_to_leak}"
+    
+    import requests
+    url     = f'http://example.com/ssrf.php?url={chain}'
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        "Cookie"    : "sessionid=abcdefg123456",
+    }
+    response = requests.get(url=url, headers=headers=headers)
+    
+    """
+    We send the requests and verify the responses
+    If status_code == 200, returns False and stop brute forcing, 
+    while we should continue when the server returns 500 (True)
+	"""
+    return response.status_code == 500
+```
+
+Once the `req()` function is properly configured, simply execute the script with:
+
+```
+python3 poc.py
+```
+
+If something went wrong (which is possible due to special request data conversion, base64 output filtering logic, or unexpected server responses), use the comments in the scripts to debug the exploit process.
