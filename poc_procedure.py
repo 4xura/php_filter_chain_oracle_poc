@@ -293,10 +293,10 @@ in fixed chunks, this prefix uniquely corresponds to each number. By mapping the
 we can systematically extract numeric values without guessing.
 """
 
-# Here we use ROT1 to decode 
+# Here we use ROT1 to shift chars
 ROT1 = 'convert.iconv.437.CP930'
 
-# Format strings for manipulation
+# Method to format strings introduced in Phase 1 for later manipulation
 BE = 'convert.quoted-printable-encode|convert.iconv..UTF7|convert.base64-decode|convert.base64-encode'
 
 # Store output string
