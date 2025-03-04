@@ -1,0 +1,3 @@
+[submodule "external/php_filter_exploit"]
+	path = external/php_filter_exploit
+	url = https://github.com/synacktiv/php_filter_chains_oracle_exploit.git
