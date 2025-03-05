@@ -87,7 +87,7 @@ def req(s):
             )       
     	return response.status_code == 500
     
-    except requests.exceptions.ConnectionError::
+    except requests.exceptions.ConnectionError:
         print("[-] Could not instantiate a connection")
         exit(1)
 ```
