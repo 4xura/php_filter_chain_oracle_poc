@@ -74,6 +74,12 @@ def req(s):
     # Send PUT requests to BookStack server 
     import requests
     target = 'https://bookstack.example.com/ajax/page/8/save-draft'
+    headers = {
+        "User-Agent"	: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        "X_CSRF_TOKEN"	: "abcdefghijklmn",
+        "Content-Type"	: "application/x-www-form-urlencoded"
+        "Cookie"    	: "sessionid=abcdefg123456",
+    }
     try:
         response = session.put(
                 target,
