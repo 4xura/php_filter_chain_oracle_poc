@@ -53,7 +53,7 @@ debug_output("Step 3 - CSUNICODE applied (Formatted Byte Output)", $formatted);
 
 // Step 4: Apply R4 (UCS-4LE.10646-1:1993) - Swap every 4 bytes
 $r4 = iconv("UCS-4LE", "10646-1:1993", $r2);
-debug_output("Step 4 - R4 shou9ld swap chunks of 4 for", $formatted);
+debug_output("Step 4 - R4 should swap chunks of 4 for", $formatted);
 debug_output("Step 4 - The HEX Pre-R4 input (Before applying UCS-4LE.10646-1:1993)", $r2);
 debug_output("Step 4 - R4 Applied", $r4, true);
 $formatted = to_byte_format($r4);
@@ -84,7 +84,7 @@ Output:
     [Step 3 - The HEX Pre-R2 input (Before applying CSUNICODE)]: 6162636465666768696a2b2d2d2d4144302d334433442b2d2d2d4144302d33443344
     [Step 3 - CSUNICODE applied (expect <0xff><0xfe>)]: fffe6162636465666768696a2b2d2d2d4144302d334433442b2d2d2d4144302d33443344
     [Step 3 - CSUNICODE applied (Formatted Byte Output)]: \xff\xfeabcdefghij+---AD0-3D3D+---AD0-3D3D
-    [Step 4 - R4 shou9ld swap chunks of 4 for]: \xff\xfeabcdefghij+---AD0-3D3D+---AD0-3D3D
+    [Step 4 - R4 should swap chunks of 4 for]: \xff\xfeabcdefghij+---AD0-3D3D+---AD0-3D3D
     [Step 4 - The HEX Pre-R4 input (Before applying UCS-4LE.10646-1:1993)]: abcdefghij+---AD0-3D3D+---AD0-3D3D
     [Step 4 - R4 Applied]: 6261feff666564636a6968672d2d2d2b2d304441443344332d2d2d2b2d30444144334433
     [Step 4 - 10646-1:1993 Applied (Formatted Byte Output)]: ba\xfe\xfffedcjihg---+-0DAD3D3---+-0DAD3D3
