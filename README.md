@@ -99,3 +99,6 @@ python3 poc.py
 ```
 
 If something went wrong (which is possible due to special request data conversion, base64 output filtering logic, or unexpected server responses), use the comments in the scripts to debug the exploit process.
+
+>  More info can be found on https://4xura.com/web/poc-scripts-for-php-filter-chain-oracle-exploit-lfr-via-ssrf/
+
