@@ -50,7 +50,7 @@ def req(s):
     We send the requests and verify the responses
     If status_code == 200, returns False and stop brute forcing, 
     while we should continue when the server returns 500 (True)
-	"""
+    """
     return response.status_code == 500
 ```
 
